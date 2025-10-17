@@ -1,0 +1,46 @@
+{% extends "store/layout.html" %}
+{% block body %}
+
+<div class="cart-container">
+    <h3>TRANSACTION VIEW (see what you SOLD)</h3>
+
+    {% regroup transactions by buyer as buyer_groups %}
+
+    {% if buyer_groups %}
+        {% for group in buyer_groups %}
+            <div class="top-left-section">
+                <h4>Buyer: {{ group.grouper.user.username }}</h4>
+            </div>
+            <div class="trans-cart-details">
+                <ul>
+                    {% for transaction in group.list %}
+                        <li>
+                            <strong>Product:</strong> {{ transaction.product.name }} |
+                            <strong>Amount:</strong> {{ transaction.amount }} |
+                            <strong>Date:</strong> {{ transaction.created_on|date:"Y-m-d H:i" }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <hr>
+        {% endfor %}
+    {% else %}
+        <p>No transactions found.</p>
+    {% endif %}
+</div>
+
+<style>
+    .cart-container {
+        margin-top: 35px;
+        padding: 20px;
+    }
+    .cart-container, .cart-container * {
+    color: #ccc;
+    }
+
+    footer a {
+    color: #ccc;
+    }
+</style>
+
+{% endblock %}
