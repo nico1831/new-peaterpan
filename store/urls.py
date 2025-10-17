@@ -1,6 +1,9 @@
 from django.urls import path
 from . import views
 app_name = "store"
+from django.views.static import serve
+from django.urls import re_path
+from django.conf import settings
 
 urlpatterns = [
     path("items/", views.show_products_list, name="show_products_list"), 
@@ -11,3 +14,7 @@ urlpatterns = [
     path("transactions/", views.show_transactions, name="show_transactions"),
     path("selleritems/<int:id>/", views.show_products_of_seller, name="show_products_of_seller")
 ] 
+
+urlpatterns += [
+    re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+]
