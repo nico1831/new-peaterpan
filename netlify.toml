@@ -1,4 +1,0 @@
-[[redirects]]
-from = "/*"
-to = "user_management/login.html"
-status = 200
