@@ -1,1 +1,1 @@
-# new-peaterpan
+# used folium for maps and Cloudinary for media storage (see https://console.cloudinary.com/app/c-c7921c1acb98560b4721252847aa74/home/dashboard )
