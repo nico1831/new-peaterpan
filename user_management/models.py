@@ -18,7 +18,7 @@ class Profile(models.Model):
 
     # New fields for verification
     verified = models.BooleanField(default=False)  # status of verification
-    business_doc = models.FileField(upload_to='business_docs/', null=True, blank=True)  # upload document
+    # business_doc = models.FileField(upload_to='business_docs/', null=True, blank=True)  # upload document
     naver_map_link = models.URLField(max_length=500, null=True, blank=True)  # Naver map URL
 
     seller_id = models.UUIDField(default=None, null=True, blank=True, unique=True, editable=False)

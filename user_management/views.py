@@ -38,7 +38,7 @@ def register(request):
         email = request.POST["email"]
         user_type = request.POST["user_type"]
 
-        business_doc = request.FILES.get("business_doc")
+        # business_doc = request.FILES.get("business_doc")
         naver_map_link = request.POST.get("naver_map_link")
 
         try:
@@ -56,8 +56,8 @@ def register(request):
 
             # If seller, save business doc and Naver map link too
             if user_type == "seller":
-                if business_doc:
-                    profile.business_doc = business_doc
+                # if business_doc:
+                #     profile.business_doc = business_doc
                 if naver_map_link:
                     profile.naver_map_link = naver_map_link
 
