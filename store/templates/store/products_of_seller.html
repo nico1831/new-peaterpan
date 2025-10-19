@@ -3,10 +3,10 @@
 
 {% block body %}
     <div class="margin-container">
-        <p>My products</p>
         <div class="product-type-grid">
             {% for product in products_of_seller %}
                 {% if request.user.profile.user_type == 'seller' %}
+                    <p>My products</p>
                     <a href="{% url 'store:update_product' product.id %}" class="product-card-link">
                     <div class="product-card">
                         {% if product.picture %}
@@ -21,6 +21,7 @@
                     </div>
                     </a>
                 {% elif request.user.profile.user_type == 'buyer' %}
+                    <p>{{request.user.profile.display_name}}'s products</p>
                     <a href="{% url 'store:show_product_details' product.id %}" class="product-card-link">
                     <div class="product-card">
                         {% if product.picture %}
