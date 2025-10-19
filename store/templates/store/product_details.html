@@ -16,7 +16,9 @@
             {% for detail in product_qs %}
             <h2>{{ detail.name }}</h2>
 
-            <img src="{{ detail.picture.url }}" alt="{{ detail.name }}" class="product-image"/>
+            {% if detail.picture %}
+                <img src="{{ detail.picture.url }}" alt="{{ detail.name }}" class="product-image"/>
+            {% endif %}
 
             <p>Type:<strong style="color:#92af39"> {{ detail.product_type.name }}</strong></p>
             <p>Description:<strong style="color:#92af39"> {{ detail.description }}</strong></p>
