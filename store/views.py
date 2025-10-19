@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from .models import ProductType, Product, Transaction, Profile
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from .forms import ProductForm, TransactionForm
@@ -9,8 +8,10 @@ from django.urls import reverse
 from django.utils.html import escape
 
 import folium
-from user_management.models import Profile
 from django.http import JsonResponse
+
+from .models import ProductType, Product, Transaction
+from user_management.models import Profile
 
 def show_products_of_seller(request, id):
     user = request.user  # the logged-in user
@@ -34,7 +35,7 @@ def show_products_list(request):
     sellers = Profile.objects.filter(user_type='seller')
 
     # Create a map centered in SNU
-    m = folium.Map(location=[37.459632748996476, 126.95178707050518], zoom_start=15)
+    m = folium.Map(location=[37.46499159706952, 126.95774345525115], zoom_start=15)
 
     # Add a marker to the map for each station
     for seller in sellers:
@@ -53,28 +54,35 @@ def show_products_list(request):
 
     # if the user is logged in
     if request.user.is_authenticated:
-        profile = Profile.objects.get(user=user)  # fetch the user's profile
-        is_users = Product.objects.filter(owner=profile)
-        is_not_users = Product.objects.filter(~Q(owner=profile))
+        try:
+            profile = Profile.objects.get(user=user)
+            is_users = Product.objects.filter(owner=profile)
+            is_not_users = Product.objects.filter(~Q(owner=profile))
+        except Profile.DoesNotExist:
+            profile = None
+            is_users = None
+            is_not_users = Product.objects.all()
     else:
         profile = None
         is_users = None
         is_not_users = Product.objects.all()
 
-    product_types = list(ProductType.objects.all())  # Converts QuerySet to list
-    has_null_products = Product.objects.filter(product_type__isnull=True).exists()  # Checks if null product type exists
 
-    # If there are products with no product type, "Others" category is added manually
-    if has_null_products:
-        product_types.append(ProductType(name="Others", description="Products with no particular product type"))
+    product_types = list(ProductType.objects.all())  # Converts QuerySet to list
+
+    # has_null_products = Product.objects.filter(product_type__isnull=True).exists()  # Checks if null product type exists
+
+    # # If there are products with no product type, "Others" category is added manually
+    # if has_null_products:
+    #     product_types.append(ProductType(name="Others", description="Products with no particular product type"))
 
     return render(request, "store/products_list.html", {
         "users_products_list": is_users,
-        "not_users_products_list": is_not_users,
+        # "not_users_products_list": is_not_users,
         "user": user,
         "product_type_list": product_types,
         "product_list": Product.objects.all(),
-        "null_product_type_list": Product.objects.filter(product_type__isnull=True),
+        # "null_product_type_list": Product.objects.filter(product_type__isnull=True),
         "profile": profile,
         "map_context": map_context,
     })

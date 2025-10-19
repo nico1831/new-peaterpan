@@ -105,18 +105,20 @@
     <body>
 
         <nav>
-            {% if request.user.profile.user_type == 'buyer' %}
-                <a href="{% url 'store:show_products_list' %}">
-                    <img src="{% static 'logo.png' %}" alt="Site Logo" class="logo"/>
-                </a>
-            {% elif request.user.profile.user_type == 'seller' %}
-                <a href="{% url 'store:show_products_of_seller' id=request.user.profile.id %}">
-                    <img src="{% static 'logo.png' %}" alt="Site Logo" class="logo"/>
-                </a>
-            {% else %}
-                <a href="{% url 'store:show_products_list' %}">
-                    <img src="{% static 'logo.png' %}" alt="Site Logo" class="logo"/>
-                </a>
+            {% if request.user.is_authenticated and request.user.profile %}
+                {% if request.user.profile.user_type == 'buyer' %}
+                    <a href="{% url 'store:show_products_list' %}">
+                        <img src="{% static 'logo.png' %}" alt="Site Logo" class="logo"/>
+                    </a>
+                {% elif request.user.profile.user_type == 'seller' %}
+                    <a href="{% url 'store:show_products_of_seller' request.user.profile.id %}">
+                        <img src="{% static 'logo.png' %}" alt="Site Logo" class="logo"/>
+                    </a>
+                {% else %}
+                    <a href="{% url 'store:show_products_list' %}">
+                        <img src="{% static 'logo.png' %}" alt="Site Logo" class="logo"/>
+                    </a>
+                {% endif %}
             {% endif %}
           
             <button id="menu-btn" class="menu-btn" aria-label="Open menu">
@@ -124,24 +126,26 @@
             </button>
         </nav>
 
-        {% if request.user.profile.user_type == 'buyer' %}
-        <!-- Sidebar content -->
-        <div id="sidebar" class="sidebar">
-        <button id="close-btn" class="close-btn" aria-label="Close menu">&times;</button>
-        <ul>
-            <li><a href="{% url 'store:show_cart' %}">My Transactions</a></li>
-            <li><a href="{% url 'logout' %}">Logout</a></li> 
-        </ul>
-        </div>
-        {% elif request.user.profile.user_type == 'seller' %}
-                <div id="sidebar" class="sidebar">
-        <button id="close-btn" class="close-btn" aria-label="Close menu">&times;</button>
-        <ul>
-            <li><a href="{% url 'store:show_transactions' %}">My Transactions</a></li>
-            <li><a href="{% url 'store:add_product' %}">Add Product</a></li>
-            <li><a href="{% url 'logout' %}">Logout</a></li> 
-        </ul>
-        </div>
+        {% if request.user.is_authenticated and request.user.profile %}
+            {% if request.user.profile.user_type == 'buyer' %}
+            <!-- Sidebar content -->
+            <div id="sidebar" class="sidebar">
+            <button id="close-btn" class="close-btn" aria-label="Close menu">&times;</button>
+            <ul>
+                <li><a href="{% url 'store:show_cart' %}">My Transactions</a></li>
+                <li><a href="{% url 'logout' %}">Logout</a></li> 
+            </ul>
+            </div>
+            {% elif request.user.profile.user_type == 'seller' %}
+                    <div id="sidebar" class="sidebar">
+            <button id="close-btn" class="close-btn" aria-label="Close menu">&times;</button>
+            <ul>
+                <li><a href="{% url 'store:show_transactions' %}">My Transactions</a></li>
+                <li><a href="{% url 'store:add_product' %}">Add Product</a></li>
+                <li><a href="{% url 'logout' %}">Logout</a></li> 
+            </ul>
+            </div>
+            {% endif %}
         {% endif %}
 
         <div class="content-div">

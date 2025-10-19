@@ -1,85 +1,85 @@
 {% extends 'store/layout.html' %}
+{% load static %}
 
 {% block body %}
 
     <div class="margin-container">
+        {% if request.user.is_authenticated and request.user.profile %}
 
-        {% if request.user.profile.user_type == 'seller' %}
-            <div class="product-section">
-                <div class="top-left-section">
-                    <h4>your products</h4>
-                </div>
-                <div class="product-type" id="your-products">
-                    <ul class="product-type-list">
-                        {% for product in users_products_list %}
-                            <li>
-                                <a href="{% url 'store:show_product_details' product.id %}" class="btn">
-                                    {{ product.name }}
-                                </a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
-        {% endif %}
-
-        {% if request.user.profile.user_type == 'buyer' %}
-
-            <div class="map-section">
-                <h3>Find Nearby Sellers</h3>
-                <div class="map-container">
-                    {{ map_context.map|safe }}
-                </div>
-            </div>
-
-            <div class="category-product-container">
-                <h3>Find Products by Category</h3>
-
-                <!-- Horizontal scrollable category buttons -->
-                <div class="category-bar">
-                {% for product_type in product_type_list %}
-                    <button class="category-btn" data-category="{{ product_type.name }}">{{ product_type.name }}</button>
-                {% endfor %}
-                </div>
-
-                <!-- Container to display products vertically -->
-                <div id="products-container">
-                {% for product_type in product_type_list %}
-                    <div class="product-section" data-category="{{ product_type.name }}" style="display:none;">
-                    <div class="product-type-grid">
-                        {% if product_type.name != "Others" %}
-                        {% for product in not_users_products_list %}
-                            {% if product_type == product.product_type %}
-                                <a href="{% url 'store:show_product_details' product.id %}" class="product-card-link">
-                                    <div class="product-card">
-                                        <img src="{{ product.picture.url }}" alt="{{ product.name }}" class="product-image"/>
-                                        <div class="product-info">
-                                            <span class="product-name">{{ product.name }}</span>
-                                            <span class="product-price">{{ product.price|floatformat:0 }}원</span>
-                                        </div>
-                                    </div>
-                                </a>
-                            {% endif %}
-                        {% endfor %}
-                        {% else %}
-                        {% for product in null_product_type_list %}
-                            {% if product.owner != profile %}
-                            <a href="{% url 'store:show_product_details' product.id %}" class="product-card-link">
-                                <div class="product-card">
-                                    <img src="{{ product.picture.url }}" alt="{{ product.name }}" class="product-image"/>
-                                    <div class="product-info">
-                                        <span class="product-name">{{ product.name }}</span>
-                                        <span class="product-price">{{ product.price|floatformat:0 }}원</span>
-                                    </div>
-                                </div>
-                            </a>
-                            {% endif %}
-                        {% endfor %}
-                        {% endif %}
-                        </div>
+            {% if request.user.profile.user_type == 'seller' %}
+                <div class="product-section">
+                    <div class="top-left-section">
+                        <h4>your products</h4>
                     </div>
-                {% endfor %}
-                {% endif %} 
+                    <div class="product-type" id="your-products">
+                        <ul class="product-type-list">
+                            {% for product in users_products_list %}
+                                <li>
+                                    <a href="{% url 'store:show_product_details' product.id %}" class="btn">
+                                        {{ product.name }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %} 
+        
+        {% if request.user.is_authenticated and request.user.profile %}
+            {% if request.user.profile.user_type == 'buyer' %}
+
+                <div class="map-section">
+                    <h3>Find Nearby Sellers</h3>
+                    <div class="map-container">
+                        {{ map_context.map|safe }}
+                    </div>
+                </div>
+
+<!-- ---------------------------------------------------------------------------------------------------------------------------- -->
+
+
+                <div class="category-product-container">
+                    <h3>Find Products by Category</h3>
+
+                    <!-- Horizontal scrollable category buttons -->
+                    <div class="category-bar">
+                    {% for product_type in product_type_list %}
+                        <button class="category-btn" data-category="{{ product_type.name }}">{{ product_type.name }}</button>
+                    {% endfor %}
+                    </div>
+
+                    <!-- Container to display products vertically -->
+                    <div id="products-container">
+                    {% for product_type in product_type_list %}
+                        <div class="product-section" data-category="{{ product_type.name }}" style="display:none;">
+                        <div class="product-type-grid">
+                            {% for product in product_list %}
+                                {% if product.product_type and product.product_type.id == product_type.id %}
+                                    <a href="{% url 'store:show_product_details' product.id %}" class="product-card-link">
+                                        <div class="product-card">
+                                            {% if product.picture %}
+                                                <img src="{{ product.picture.url }}" alt="{{ product.name }}" class="product-image"/>
+                                            {% else %}
+                                                <img src="{% static 'blank.jpg' %}" alt="No image" class="product-image" id="alt-img"/>
+                                            {% endif %}
+                                            <div class="product-info">
+                                                <span class="product-name">{{ product.name }}</span>
+                                                <span class="product-price">{{ product.price|floatformat:0 }}원</span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                {% endif %}
+                            {% endfor %}
+                            </div>
+                        </div>
+                    {% endfor %}
+
+
+<!-- ---------------------------------------------------------------------------------------------------------------------------- -->
+
+            {% endif %} 
+        {% endif %} 
             </div>
     </div>
 
