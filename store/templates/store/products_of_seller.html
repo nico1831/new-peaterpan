@@ -10,6 +10,8 @@
                     <div class="product-card">
                         {% if product.picture %}
                             <img src="{{ product.picture.url }}" alt="{{ product.name }}" class="product-image"/>
+                        {% else %}
+                            <img src="{% static 'blank.jpg' %}" alt="No image" class="product-image" id="alt-img"/>
                         {% endif %}
                         <div class="product-info">
                             <span class="product-name">{{ product.name }}</span>
@@ -22,6 +24,8 @@
                     <div class="product-card">
                         {% if product.picture %}
                             <img src="{{ product.picture.url }}" alt="{{ product.name }}" class="product-image"/>
+                        {% else %}
+                            <img src="{% static 'blank.jpg' %}" alt="No image" class="product-image" id="alt-img"/>
                         {% endif %}
                         <div class="product-info">
                             <span class="product-name">{{ product.name }}</span>
