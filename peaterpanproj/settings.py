@@ -147,5 +147,5 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Cloudinary Settings (for media storage like user-inputted pics)
-CLOUDINARY_URL = os.environ.get('CLOUDINARY_URL')
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+# CLOUDINARY_URL = os.environ.get('CLOUDINARY_URL')
+# DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
